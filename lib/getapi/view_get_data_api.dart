@@ -24,23 +24,44 @@ class _ViewGetDataApiState extends State<ViewGetDataApi> {
 
 
   @override
-  Future<Widget> build(BuildContext context) async {
+  Widget build(BuildContext context) {
+    var futurejokes= fetchjokes();
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){}, icon: Icon(Icons.more)),
+        leading: IconButton(onPressed: (){
+          setState(() {
+              futurejokes=fetchjokes();
+          });
+        }, icon: Icon(Icons.more)),
         centerTitle: true,
         title: const Text('Get Data API'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Padding(padding: const EdgeInsets.all(20),
        
-       child: FutureBuilder<String?>(
-  future: await fetchjokes(),
+       child: FutureBuilder<dynamic>(
+  future: fetchjokes(),
 
   builder: (context, snapshot) {
 
     if(snapshot.hasData){
-      return Text(snapshot.data.toString());
+      final joke = snapshot.data;
+      final String setup = joke['setup'];
+      final String punchline = joke['punchline'];
+
+
+  return 
+      Column(
+      
+        children: [
+      
+          Text(setup, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+          SizedBox(height: 20,),
+          Text(punchline, style: TextStyle(fontSize: 18),), 
+        ],);
+    
+ 
+
     }
 
     return Center(
